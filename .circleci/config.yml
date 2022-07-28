@@ -4,21 +4,21 @@ orbs:
   # For the orb-tools-orb it must call itself within the first workflow,
   #   meaning this dev version will need to be published every 90 days.
   # No other orbs will need to import themselves here.
-  orb-tools-alpha: circleci/orb-tools@dev:alpha
-  shellcheck: circleci/shellcheck@3.0
+  orb-tools: circleci/orb-tools@11.1
+  shellcheck: circleci/shellcheck@3.1
 
 workflows:
   lint-pack:
     jobs:
-      - orb-tools-alpha/lint:
+      - orb-tools/lint:
           filters:
             tags:
               only: /.*/
-      - orb-tools-alpha/pack:
+      - orb-tools/pack:
           filters:
             tags:
               only: /.*/
-      - orb-tools-alpha/review:
+      - orb-tools/review:
           filters:
             tags:
               only: /.*/
@@ -27,25 +27,25 @@ workflows:
           filters:
             tags:
               only: /.*/
-      - orb-tools-alpha/publish:
-          orb-name: circleci/orb-tools
+      - orb-tools/publish:
+          orb-name: scribe-security/scribe-tools
           vcs-type: << pipeline.project.type >>
           requires:
             [
-              orb-tools-alpha/lint,
-              orb-tools-alpha/review,
-              orb-tools-alpha/pack,
+              orb-tools/lint,
+              orb-tools/review,
+              orb-tools/pack,
               shellcheck/check,
             ]
           github-token: GHI_TOKEN
-          context: orb-publisher
+          context: orb-publishing
           filters:
             tags:
               only: /.*/
-      - orb-tools-alpha/continue:
+      - orb-tools/continue:
           pipeline-number: << pipeline.number >>
           vcs-type: << pipeline.project.type >>
-          requires: [orb-tools-alpha/publish]
+          requires: [orb-tools/publish]
           filters:
             tags:
               only: /.*/

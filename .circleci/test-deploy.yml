@@ -1,6 +1,6 @@
 version: 2.1
 orbs:
-  orb-tools-alpha: circleci/orb-tools@dev:<<pipeline.git.revision>>
+  orb-tools-alpha: scribe-security/scribe-tools@dev:<<pipeline.git.revision>>
 
 workflows:
   test-deploy:
@@ -23,7 +23,7 @@ workflows:
           pub-type: production
           requires:
             [orb-tools-alpha/lint, orb-tools-alpha/review, orb-tools-alpha/pack]
-          context: orb-publisher
+          context: orb-publishing
           github-token: GHI_TOKEN
           filters:
             branches:
